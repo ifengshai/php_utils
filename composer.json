@@ -6,12 +6,7 @@
         "php": ">=7.2",
         "illuminate/contracts": "8.*",
         "illuminate/support": "8.*",
-        "monolog/monolog": "~1.11",
-        "fluent/logger": "^1.0",
-        "guzzlehttp/guzzle": "^6.2",
-        "squizlabs/php_codesniffer": "2.*",
-        "phpmd/phpmd": "^2.5",
-        "predis/predis": "1.0"
+        "fluent/logger": "^1.0"
     },
     "license": "MIT",
     "authors": [
