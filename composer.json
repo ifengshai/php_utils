@@ -1,0 +1,26 @@
+{
+    "name": "fengsha/utils",
+    "description": "这是larave工具包",
+    "type": "library",
+    "require": {
+        "php": ">=7.2",
+        "fluent/logger": "^1.0",
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "fengsha",
+            "email": "173748596@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+	"autoload": {
+        "psr-4": {
+            "Fengsha\\Utils\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}
