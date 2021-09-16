@@ -4,6 +4,7 @@ phpunit.xml
 build/
 docs/
 tools/
+tests/
 phpDocumentor.phar
 
 ###> squizlabs/php_codesniffer ###

@@ -94,7 +94,7 @@ abstract class Processor
                 $this->uri = $_SERVER['REQUEST_URI'];
             } else {
                 $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : ['cli'];
-                $this->uri = implode($args, '|');
+                $this->uri = implode('|',$args);
             }
         }
         return $this->uri;
