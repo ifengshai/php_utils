@@ -9,7 +9,7 @@ return [
     'trace_id' => 'HTTP_X_REQUEST_ID',
     'default_format' => '#traceId:{traceId} host:{host} from:{from} uri:{uri} clientIp:{clientIp} rpcId:{rpcId} userId:{userId} ',
     'request_log' => [
-        'enabled' => true,
+        'enabled' => false,
         'path' => env('APP_REQUEST_LOG_PATH', storage_path('logs/request/request.log')),
 
         /**
