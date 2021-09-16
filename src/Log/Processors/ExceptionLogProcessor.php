@@ -57,7 +57,7 @@ class ExceptionLogProcessor extends Processor
         if ($this->path) {
             return $this->path;
         }
-        $this->path = config('ynlog.exception_log.path');
+        $this->path = config('fslog.exception_log.path');
         return $this->path;
     }
 
@@ -66,14 +66,14 @@ class ExceptionLogProcessor extends Processor
         if ($this->type) {
             return $this->type;
         }
-        $this->type = config('ynlog.exception_log.type');
+        $this->type = config('fslog.exception_log.type');
         return $this->type;
     }
 
     public function getFormat()
     {
         if (is_null($this->format)) {
-            $this->format = config('ynlog.exception_log.format', self::DEFAULT_EXT_FORMAT);
+            $this->format = config('fslog.exception_log.format', self::DEFAULT_EXT_FORMAT);
         }
         return $this->format;
     }
