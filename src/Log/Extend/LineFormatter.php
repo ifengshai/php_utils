@@ -9,7 +9,7 @@ use Monolog\Formatter\LineFormatter as Formatter;
 class LineFormatter extends Formatter
 {
 
-    public function format(array $record)
+    public function format(array $record):string
     {
         $output = parent::format($record);
 
