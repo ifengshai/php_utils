@@ -1,8 +1,6 @@
 # 云鸟工具包
-支持 Laravel 5.1 以上，工具包目前有 Log、AuthClient 和 Hooks功能。
+支持 Laravel 5.1 以上，工具包目前有 Log功能。
 * Log 对 laravel 的日志功能进行了扩展，增加了 `Request Log` 与 `Exception Log` 功能
-* AuthClient 是 Auth Service 的 SDK,提供了登录认证和调用权限接口的功能
-* Hooks 目前仅提供git pre-commit hook, 提供了phpcbf、phpcs、phpmd的相关检查。
 
 ## Installation
 ### Laravel 5.x:
@@ -11,20 +9,12 @@
 "repositories": [
         {
             "type": "git",
-            "url": "ssh://git@dev.xunhuji.me:17999/beeper/beeper_utils_php.git"
+            "url": "git@codeup.aliyun.com:611c7e5076b0c8e58d793328/php_utils.git"
         }
     ]
 ```
-* 如需使用hooks功能,请在composer.json中增加post-install-cmd和post-update-cmd的内容。**注意**不是替换是增加内容。
-``` php
-        "post-install-cmd": [
-            "Fengsha\\Utils\\Composer\\Script::postComposer"
-        ],
-        "post-update-cmd": [
-            "Fengsha\\Utils\\Composer\\Script::postComposer"
-        ]
-```
-* 执行 `composer require yunniao/utils:dev-master` 安装包
+* 执行 `composer require fengsha/utils:dev-master` 安装包
+
 * 增加 `ServiceProvide`，编辑 `config/app.php`
 ```php
 'providers' => [
@@ -47,8 +37,8 @@
 
 * 增加 `app_name` 和 `app_from`，编辑 `config/app.php`
 ```php
-'app_name' => 'beeper_base_data',  // 以 base_data 项目举例
-'app_from' => '7200',  // 以 base_data 项目举例
+'app_name' => 'fengsha',  // 链路追踪的时候确定是哪个服务
+'app_from' => '88888888',  // 链路追踪的时候确定是哪个服务
 ```
 
 * 如果要替换框架原有的 `Log`，需要编辑 `config/app.php`，注释掉原有的 `Log` alias，并将工具命名为 `Log`
@@ -66,48 +56,6 @@
 php artisan vendor:publish --provider="Fengsha\Utils\Log\Providers\LoggerServiceProvider"
 ```
 
-### Lumen:
-编辑 `bootstrap/app.php` 在文件首部增加入口时间定义
-```php
-define('LARAVEL_START', microtime(true));
-```
-
-增加配置 `config/app.php`
-```php
-<?php
-
-return [
-    'app_name' => 'beeper_base_data',  // 以 base_data 项目举例
-];
-```
-
-编辑 `app/Providers/AppServiceProvider.php` 引用配置 `config/app.php`
-```php
-public function register()
-{
-    $this->app->configure('app');
-}
-```
-
-编辑 `bootstrap/app.php` 打开注释
-```php
-$app->withFacades();
-$app->register(App\Providers\AppServiceProvider::class);
-```
-
-编辑 `app/Providers/AppServiceProvider.php`
-```php
-public function register()
-{
-    $this->registerFsLogger();
-}
-
-public function registerFsLogger()
-{
-    $this->app->register(\Fengsha\Utils\Log\Providers\LumenLoggerServiceProvider::class);
-    class_alias('Fengsha\Utils\Log\Facades\FsLog', 'FsLog');
-}
-```
 # Usage
 ## Log
 ### 普通日志方法
