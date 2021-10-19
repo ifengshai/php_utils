@@ -2,7 +2,7 @@
 支持 Laravel 5.1 以上，工具包目前有 Log功能。
 * Log 对 laravel 的日志功能进行了扩展，增加了 `Request Log` 与 `Exception Log` 功能
 
-## Installation
+## 日志使用开始
 ### Laravel 5.x:
 * 编辑项目中 composer.json 文件，增加 repostories 项
 ```php
@@ -155,7 +155,42 @@ $version = '2.2.*';
  */
 $this->checkExtensionVersion($extension,$version);
 ```
+## 日志使用结束
 
 
 
 
+
+## 分布式redis锁开始
+如果项目没有引入过这个工具,可以在composer.json中引入,增加 repostories 项
+```php
+"repositories": [
+        {
+            "type": "git",
+            "url": "git@codeup.aliyun.com:611c7e5076b0c8e58d793328/php_utils.git"
+        }
+    ]
+```
+
+* 执行 `composer require fengsha/utils:dev-master` 安装包
+
+* 增加 ServiceProvide，编辑 config/app.php
+```php
+'providers' => [
+    /**
+     * Customer Service Providers...
+     */
+     Fengsha\Utils\RedisDistributedLock\Providers\RedisDistributedLockServiceProvider::class
+],
+```
+
+* 增加 aliases，编辑 config/app.php
+```php
+'aliases' => [
+    /**
+     * Customer aliases
+     */
+    'Lock'  => Fengsha\Utils\RedisDistributedLock\Facades\RedisDistributedLock::class
+],
+```
+## 分布式redis锁结束
