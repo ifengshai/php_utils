@@ -9,7 +9,7 @@
 "repositories": [
         {
             "type": "git",
-            "url": "git@codeup.aliyun.com:611c7e5076b0c8e58d793328/php_utils.git"
+            "url": "git@github.com:ifengshai/php_utils.git"
         }
     ]
 ```
@@ -167,7 +167,7 @@ $this->checkExtensionVersion($extension,$version);
 "repositories": [
         {
             "type": "git",
-            "url": "git@codeup.aliyun.com:611c7e5076b0c8e58d793328/php_utils.git"
+            "url": "git@github.com:ifengshai/php_utils.git"
         }
     ]
 ```
