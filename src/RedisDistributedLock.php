@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Redis;
 
 class RedisDistributedLock
 {
-    const LOCK_SUCCESS = 'OK';
+    const LOCK_SUCCESS = true;
     const IF_NOT_EXIST = 'NX';
+    const IF_EXIST = 'XX';
     const MILLISECONDS_EXPIRE_TIME = 'PX';
     const RELEASE_SUCCESS = 1;
 
@@ -20,12 +21,12 @@ class RedisDistributedLock
      * @param int $sleep 休眠时间(单位毫秒)
      * @return bool 是否获取成功
      */
-    public function lock(string $key, string $requestId, int $expire, int $sleep = 3000): bool
+    public static function lock(string $key, string $requestId, int $expire, int $sleep = 3000): bool
     {
         while (true) {
             try {
                 $result = Redis::set($key, $requestId, self::MILLISECONDS_EXPIRE_TIME, $expire, self::IF_NOT_EXIST);
-                if (self::LOCK_SUCCESS === (string) $result) {
+                if (self::LOCK_SUCCESS == (bool) $result) {
                     return true;
                 } else {
                     usleep($sleep * 1000);
@@ -46,14 +47,14 @@ class RedisDistributedLock
      * @param int $sleep 休眠时间(单位毫秒)
      * @return bool 是否获取成功
      */
-    public function tryLock(string $key, string $requestId, int $expire, int $timeout = 5000, int $sleep = 3000): bool
+    public static function tryLock(string $key, string $requestId, int $expire, int $timeout = 5000, int $sleep = 3000): bool
     {
         $timeout = $timeout / 1000;
         $timeNow = microtime(true);
         while (true) {
             try {
                 $result = Redis::set($key, $requestId, self::MILLISECONDS_EXPIRE_TIME, $expire, self::IF_NOT_EXIST);
-                if (self::LOCK_SUCCESS === (string) $result) {
+                if (self::LOCK_SUCCESS == (bool) $result) {
                     return true;
                 } else {
                     if ($timeout == 0) {
@@ -78,7 +79,7 @@ class RedisDistributedLock
      * @param string $requestId 请求id
      * @return bool 是否成功
      */
-    public function releaseLock(string $key, string $requestId): bool
+    public static function releaseLock(string $key, string $requestId): bool
     {
         $lua = <<<LUA
 if redis.call('get', KEYS[1]) == ARGV[1]
@@ -98,11 +99,19 @@ LUA;
      * @param string $key 锁
      * @param string $requestId 请求id
      * @param int $expire 过期时间(单位毫秒)
+     * @return bool 释放续期成功
      */
-    public function refreshExpireTime(string $key, string $requestId, int $expire)
+    public static function refreshExpireTime(string $key, string $requestId, int $expire = 30): bool
     {
-        if (Redis::get($key) == $requestId) {
-            Redis::set($key, $requestId, self::MILLISECONDS_EXPIRE_TIME, $expire);
-        }
+        $lua = <<<LUA
+if redis.call('get', KEYS[1]) == ARGV[1]
+then 
+    return redis.call('expire', KEYS[1], ARGV[2]); 
+else 
+    return 0; 
+end
+LUA;
+        $result = Redis::eval($lua, 1, $key, $requestId, $expire);
+        return self::RELEASE_SUCCESS === $result;
     }
 }
